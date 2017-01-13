@@ -58,16 +58,17 @@
 
             console.log('Chromecast: play %s on %s', url, this.get('name'));
             console.log('Chromecast: connecting to %s', this.device.host);
-
-            self.device.play(url, media, function (err, status) {
-                if (err) {
-                    console.error('Chromecast.play() error: ', err);
-                } else {
-                    console.log('Playing %s on %s', url, self.get('name'));
-                    self.set('loadedMedia', status.media);
-                }
+          
+            self.device.connect( function () {
+                self.device.play(url, media, function (err, status) {
+                    if (err) {
+                        console.error('Chromecast.play() error: ', err);
+                    } else {
+                        console.log('Playing %s on %s', url, self.get('name'));
+                        self.set('loadedMedia', status.media);
+                    }
+                });
             });
-
             this.device.on('status', function (status) {
                 self._internalStatusUpdated(status);
             });
